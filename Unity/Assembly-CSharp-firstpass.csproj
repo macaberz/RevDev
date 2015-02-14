@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{CD8C9303-404B-FB8D-6B9B-21988D5CAC0A}</ProjectGuid>
+	<ProjectGuid>{2662B409-6332-1E56-D797-C9025C53BDD6}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -46,8 +46,37 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerPhysics.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\GUI\SpriterEntityInspector.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\BoneRef.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\BoneTimelineKey.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\Entity.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\File.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\Folder.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\Key.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\KeyElem.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\MainlineKey.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\ObjectRef.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\ObjectType.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\Ref.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\ScmlObject.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\SpatialInfo.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\SpatialTimelineKey.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\SpriteTimelineKey.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\SpriterAnimation.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\Timeline.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Spriter\TimelineKey.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Unity\AnimationBuilder.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Unity\AnimationCurveBuilder.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Unity\PrefabBuilder.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Unity\ScmlPostProcessor.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Utils\AnimationCurveUtils.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Utils\AssetUtils.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Utils\PrefabUtils.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Editor\Utils\XmlUtils.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Example\Editor\AnimationTestScriptInspector.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Example\Scripts\AnimationTestScript.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Runtime\SortingOrderUpdate.cs" />
+     <Compile Include="Assets\Plugins\Spriter2Unity\Runtime\SpriterEntity.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Applications/Unity46/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
