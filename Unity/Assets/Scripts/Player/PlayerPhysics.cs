@@ -14,7 +14,7 @@ namespace Assets.Scripts.Player
         private Vector2 _colliderSize;
         private Vector2 _colliderCenter;
 
-        private Ray _ray;
+        private Ray2D _ray;
         private RaycastHit2D _hit;
         private const float Skin = 0.005f;
         private bool _grounded;
@@ -40,16 +40,15 @@ namespace Assets.Scripts.Player
                 float x = (playerPosition.x + _colliderCenter.x - _colliderSize.x/2) + _colliderSize.x / 2 * i;
                 float y = playerPosition.y + _colliderCenter.y + _colliderSize.y / 2 * dir;
 
-                Debug.DrawRay(_ray.origin, _ray.direction);
-                _hit = Physics2D.Raycast(new Vector2(x, y), new Vector2(0, dir), Mathf.Abs(deltaY), CollisionMask);
+                _ray = new Ray2D(new Vector2(x,y), new Vector2(0, dir));
+                _hit = Physics2D.Raycast(_ray.origin, _ray.direction, Mathf.Abs(deltaY), CollisionMask);
 
                 if (_hit.collider != null)
                 {
-                    Debug.Log("Hit!!");
                     float distanceToGround = Vector2.Distance(_ray.origin, _hit.point);
                     if (distanceToGround > Skin)
                     {
-                        deltaY = distanceToGround * dir + Skin;
+                        deltaY -= distanceToGround * dir + Skin;
                     }
                     else
                     {
