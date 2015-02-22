@@ -8,9 +8,9 @@ public class PlayerControllerScript : MonoBehaviour
     public float JumpForce = 700.0f;
     private bool _facingRight = true;
 
-    private bool _grounded = false;
+    private bool _grounded;
     public Transform GroundCheck;
-    private float _groundRadius = 0.2f;
+    private const float GroundRadius = 0.2f;
     public LayerMask GroundMask;
 
     private bool _hasDoubleJumped;
@@ -25,7 +25,7 @@ public class PlayerControllerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        _grounded = Physics2D.OverlapCircle(GroundCheck.position, _groundRadius, GroundMask);
+        _grounded = Physics2D.OverlapCircle(GroundCheck.position, GroundRadius, GroundMask);
         _animator.SetBool("ground", _grounded);
 
         if (_grounded)
@@ -60,7 +60,7 @@ public class PlayerControllerScript : MonoBehaviour
     void Flip()
     {
         _facingRight = !_facingRight;
-        Vector3 localScale = transform.localScale;
+        var localScale = transform.localScale;
         localScale.x *= -1;
         transform.localScale = localScale;
     }
