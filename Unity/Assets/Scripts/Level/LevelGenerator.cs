@@ -19,6 +19,9 @@ public class LevelGenerator : MonoBehaviour
 
     //gameObject to instantiate, I have it set to public so that it is changeable in the editor and I can test dimensional changes in various different object -- purely to debug
     public GameObject tileObject;
+    //Player spawn instantiation WILL CHANGE THIS TO Resources.Load() folder eventually
+    public GameObject playerSpawnPrefab;
+
 
     //Tile List
     private GameObject[,] tilePlacement2dArray;
@@ -33,7 +36,7 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
-    spawnPoint = GameObject.Find("MapGeneratorOriginObj").transform; //Finds the transform of the "Spawnpoint" gameobjet object
+    spawnPoint = GameObject.Find("MapGeneratorOriginObj").transform; //Finds the transform of the "Spawnpoint" gameobject object
     tileSize = tileObject.gameObject.renderer.bounds.extents * 2; //adds the tile objects dimesions to the tileSize value
     tilePlacement2dArray = new GameObject[tileArraySizeX, tileArraySizeY]; //makes a new array of gameobjects with dimensions based on 2 "x,y" variables
     CreateTileGrid();
@@ -56,6 +59,7 @@ public class LevelGenerator : MonoBehaviour
     {
         
         GameObject tileParent = new GameObject(); //Sets a parent object for the overal grid, all tiles instanced in the loop below will be a child of this object.
+        tileParent.gameObject.name = "tileGridParent";
         tileParent.transform.position = spawnPoint.transform.position;
         tileParent.transform.rotation = spawnPoint.transform.rotation;
 
@@ -173,9 +177,9 @@ public class LevelGenerator : MonoBehaviour
     {
         GetRandomTile();
         GameObject spawnSelector = tilePlacement2dArray[coordX, coordY];
-        if(spawnSelector.gameObject.tag == "emptyBlock")
+        if(spawnSelector.gameObject.tag == "emptyTile")
         {
-
+            GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnSelector.transform.position, Quaternion.identity);
         }
     }
 
