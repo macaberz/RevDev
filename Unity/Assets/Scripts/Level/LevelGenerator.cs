@@ -147,7 +147,7 @@ public class LevelGenerator : MonoBehaviour
         {
             GetRandomTile();
             GameObject tileSelector = tilePlacement2dArray[coordX, coordY];
-            if (tileSelector.gameObject.tag != "Tile")
+            if (tileSelector.gameObject.tag == "emptyTile")
             {
                 setSolidSquare(tileSelector);
                 x++;
@@ -156,7 +156,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
- 
+ //Made setSolidSquare a seperate function so I could check against different tag names and send the tile through it.
     void setSolidSquare(GameObject tileToSet)
     {
         tileExclusionList.Add(tileToSet);
