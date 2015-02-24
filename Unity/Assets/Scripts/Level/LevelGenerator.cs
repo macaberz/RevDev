@@ -181,6 +181,10 @@ public class LevelGenerator : MonoBehaviour
         {
             GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnSelector.transform.position, Quaternion.identity);
         }
+        else if (spawnSelector.gameObject.tag != "emptyTile")
+        {
+            SetPlayerSpawn();
+        }
     }
 
 
