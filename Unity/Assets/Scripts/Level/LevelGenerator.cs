@@ -40,6 +40,7 @@ public class LevelGenerator : MonoBehaviour
     AddBorderToExclusionList();
     //GetRandomTile();
     AddBlocks();
+    SetPlayerSpawn();
     }
 
 
@@ -92,7 +93,7 @@ public class LevelGenerator : MonoBehaviour
             //Debug.Log(tempTile);
             tempTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
             tempTile.gameObject.renderer.material.color = Color.red;
-            tempTile.gameObject.tag = "excluded";
+            tempTile.gameObject.tag = "borderTile";
         }
         for (int x = 0; x < tileArraySizeY; x++)
         {
@@ -101,7 +102,7 @@ public class LevelGenerator : MonoBehaviour
             //Debug.Log(tempTile);
             tempTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
             tempTile.gameObject.renderer.material.color = Color.red;
-            tempTile.gameObject.tag = "excluded";
+            tempTile.gameObject.tag = "borderTile";
         }
         for (int x = 0; x < tileArraySizeX; x++)
         {
@@ -110,7 +111,7 @@ public class LevelGenerator : MonoBehaviour
             //Debug.Log(tempTile);
             tempTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
             tempTile.gameObject.renderer.material.color = Color.red;
-            tempTile.gameObject.tag = "excluded";
+            tempTile.gameObject.tag = "borderTile";
         }
         for (int x = 0; x < tileArraySizeY; x++)
         {
@@ -119,7 +120,7 @@ public class LevelGenerator : MonoBehaviour
             //Debug.Log(tempTile);
             tempTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
             tempTile.gameObject.renderer.material.color = Color.red;
-            tempTile.gameObject.tag = "excluded";
+            tempTile.gameObject.tag = "borderTile";
         }
 
     }
@@ -146,27 +147,36 @@ public class LevelGenerator : MonoBehaviour
         {
             GetRandomTile();
             GameObject tileSelector = tilePlacement2dArray[coordX, coordY];
-            if (tileSelector.gameObject.tag != "excluded")
+            if (tileSelector.gameObject.tag != "Tile")
             {
-                tileExclusionList.Add(tileSelector);
-                tileSelector.gameObject.tag = "excluded";
-                //tileSelector.gameObject.renderer.material.color = Color.red;
-                tileSelector.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                Debug.Log(tileSelector);
-                Debug.Log(addBlockCounter);
-                addBlockCounter++;
+                setSolidSquare(tileSelector);
                 x++;
-
             }
             x--;
         }
     }
 
  
-
-    void CreateExclusionList()
+    void setSolidSquare(GameObject tileToSet)
     {
+        tileExclusionList.Add(tileToSet);
+        tileToSet.gameObject.tag = "solidTile";
+        //tileSelector.gameObject.renderer.material.color = Color.red;
+        tileToSet.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        Debug.Log(tileToSet);
+        Debug.Log(addBlockCounter);
+        addBlockCounter++;
+    }
 
+
+    void SetPlayerSpawn()
+    {
+        GetRandomTile();
+        GameObject spawnSelector = tilePlacement2dArray[coordX, coordY];
+        if(spawnSelector.gameObject.tag == "emptyBlock")
+        {
+
+        }
     }
 
 
