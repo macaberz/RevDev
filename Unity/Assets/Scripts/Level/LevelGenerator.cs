@@ -11,7 +11,7 @@ public class LevelGenerator : MonoBehaviour
     private int tileArraySizeY = 10;
 
     //Amount of empty blocks made for game level
-    private int amountToAdd = 25;
+    private int amountToAdd = 5;
     private int addBlockCounter;
 
     //Tile Object dimensions
@@ -25,15 +25,31 @@ public class LevelGenerator : MonoBehaviour
 
     //Tile List
     private GameObject[,] tilePlacement2dArray;
-    //Tile Settings List
-    //private string[,] tileSettings2dArray;
+    //Tile Solid List
+    public List<GameObject> solidTileList = new List<GameObject>();
+    //Tile Solid List selected object ID and the GameObject container it is assigned to
+    public int solidListID; //MUST BE CHANGED TO PRIVATE FOR DEPLOY---------------------------------!!!!!!!!!!!!
+    private GameObject solidListSelectedObj;
+    private GameObject posInMainTileArray;
+
+    //Tile Checker List
+    public List<GameObject> tileCheckerList = new List<GameObject>();
+    //Tile Checker reference object
+    private GameObject spawnSelector;
 
     //Exclusion List
     public List<GameObject> tileExclusionList = new List<GameObject>();
 
+    //Y IS HORIZONTAL, X VERTICAL
     //Temp coordinate for tile/array
     private int coordX;
     private int coordY;
+    private int solidCoordX;
+    private int solidCoordY;
+
+    //Material cache
+    public Material standardBlockMaterial;
+    public Material transparentMaterial;
 
 
     void Start()
@@ -138,17 +154,41 @@ public class LevelGenerator : MonoBehaviour
     {
         coordX = Random.Range(1, tileArraySizeX);
         coordY = Random.Range(1, tileArraySizeY);
+        spawnSelector = tilePlacement2dArray[coordX, coordY];
+        if(spawnSelector.gameObject.tag == "borderTile") //Makes sure the coords never output border tiles
+        {
+            GetRandomTile();
+        }
         //Debug.Log(coordX);
         //Debug.Log(coordY);
     }
 
-    
-    //Add all the border blocks to an exclusion list=====!
-    //Get random array value
-    //check against the exclusion values
-    //if its valid, add it to exclusion list and then +1 to the completed counter
-    //enable mesh and colider on block
-    //iterate.
+    void GetRandomSolidTile() //This is specifically for finding a solid block after the level generation is complete.
+   {
+        solidListID = Random.Range(0, solidTileList.Count);
+        solidListSelectedObj = solidTileList[solidListID];
+        Debug.Log("Solid LIST ID" + solidListID);
+        Debug.Log("Solid tile selected" + solidListSelectedObj);
+
+        //Debug.Log(solidListSelectedObj.gameObject.name);
+
+
+        //solidCoordX = listPositionID / 10 % 10; 
+        //This will get a seperate int using the remainder after division by 10
+        //solidCoordY = listPositionID % 10; 
+        //Same process, increase the division number by adding a 0 for every additional digit length of an integer. EG: 256 would be split to its 3rd digit by dividing by 100, 3495 would be divided by 1000
+
+        /*
+        int listPositionID = tileExclusionList.IndexOf(solidListSelectedObj);
+        solidCoordX = listPositionID / 10 % 10; //This will get a seperate int using the remainder after division by 10
+        solidCoordY = listPositionID % 10; //Same process, increase the division number by adding a 0 for every additional digit length of an integer. EG: 256 would be split to its 3rd digit by dividing by 100, 3495 would be divided by 1000
+        Debug.Log(listPositionID);
+        Debug.Log(solidCoordX);
+        Debug.Log(solidCoordY);
+       //SpawnBlockCheck(solidCoordX, solidCoordY);
+        */
+   }
+
 
     public void AddBlocks()//If list does not contain the item that the coords point to then turn off mesh and collider
     {
@@ -171,7 +211,7 @@ public class LevelGenerator : MonoBehaviour
     {
         tileExclusionList.Add(tileToSet);
         tileToSet.gameObject.tag = "solidTile";
-        //tileSelector.gameObject.renderer.material.color = Color.red;
+        solidTileList.Add(tileToSet);
         tileToSet.gameObject.GetComponent<MeshRenderer>().enabled = true;
         //Debug.Log(tileToSet);
         Debug.Log(addBlockCounter);
@@ -181,46 +221,87 @@ public class LevelGenerator : MonoBehaviour
 
     void SetPlayerSpawn()
     {
-        GetRandomTile();
-        GameObject spawnSelector = tilePlacement2dArray[coordX, coordY];
-        SpawnBlockCheck(spawnSelector);
+        Debug.Log("MAKE SPAWN");
+        GetRandomSolidTile();
 
-        if(spawnSelector.gameObject.tag == "emptyTile")
+        GameObject spawnBaseTile = tilePlacement2dArray[solidCoordX + 1, solidCoordY];
+            spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+            spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+        if (spawnBaseTile.gameObject.tag == "emptyTile")
         {
-            GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnSelector.transform.position, Quaternion.identity);
+            GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
         }
-        else if (spawnSelector.gameObject.tag != "emptyTile")
+        else if(spawnBaseTile.gameObject.tag != "borderTile")
         {
             SetPlayerSpawn();
         }
+        else if (spawnBaseTile.gameObject.tag != "emptyTile")
+        {
+            SetPlayerSpawn();
+        }
+
+
+
+       
     }
 
-    void SpawnBlockCheck(GameObject currentBlock)
+   /* void SpawnBlockCheck(int gridX, int gridY)
     {
-    
+        GameObject spawnBaseTile = tilePlacement2dArray[gridX, gridY + 1];
+        if (spawnBaseTile.gameObject.tag == "solidTile")
+        {
+            Debug.Log("case of SOLID");
+            spawnBaseTile = tilePlacement2dArray[gridX, gridY + 1];
+
+            spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+            spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+            /*
+            if (spawnBaseTile.gameObject.tag == "emptyTile")
+            {
+                GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
+            }
+            else if (spawnBaseTile.gameObject.tag != "emptyTile")
+            {
+                SetPlayerSpawn();
+            }
+            
+        }
+        else if (spawnBaseTile.gameObject.tag != "emptyTile")
+        {
+            Debug.Log("case of EMPTY");
+            
+        }
     }
+    */
  
     void GetSurroundingWallCount(int gridX, int gridY)
     {
         //int wallCount = 0;
         GameObject checkedTile;
         checkedTile = tilePlacement2dArray[gridX, gridY];
+        checkedTile.gameObject.renderer.material = standardBlockMaterial;
         if(checkedTile.gameObject.tag == "solidTile")
-        { 
+        {
+            tileCheckerList.Clear();
             for (int neighbourX = gridX - 1;neighbourX <= gridX + 1; neighbourX++) //Breaking because it is using tiles in the exclusion list
             {
                for (int neighbourY = gridY - 1;neighbourY <= gridY + 1; neighbourY++)
                {
                     if (neighbourX != gridX || neighbourY != gridY)
                     {
-                    checkedTile = tilePlacement2dArray[neighbourX, neighbourY];     
-                    Debug.Log(checkedTile);
+                    checkedTile = tilePlacement2dArray[neighbourX, neighbourY];
+                        /*THESE BLOCK CHECKER RESULT VISUALISATION TOOLS, UNCOMMENT TO SEE THE PROCESS
+                    checkedTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                    checkedTile.gameObject.renderer.material = transparentMaterial;
+                         */
+                    tileCheckerList.Add(checkedTile);
+                    //Debug.Log(checkedTile);
                     }
 
                }
             }        
         }
-
+        //Debug.Log(tileCheckerList);
     }
 }
 
