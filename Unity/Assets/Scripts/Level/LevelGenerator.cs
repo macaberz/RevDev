@@ -53,6 +53,7 @@ public class LevelGenerator : MonoBehaviour
     //Material cache
     public Material standardBlockMaterial;
     public Material transparentMaterial;
+    public Material levelDoor;
 
 
     void Start()
@@ -253,7 +254,7 @@ public class LevelGenerator : MonoBehaviour
                 {
                     GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
                     spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                    spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+                    spawnBaseTile.gameObject.renderer.material = levelDoor;
                 }
                 else if (spawnBaseTile.gameObject.tag != "borderTile")
                 {
