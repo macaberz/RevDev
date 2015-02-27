@@ -11,7 +11,7 @@ public class LevelGenerator : MonoBehaviour
     private int tileArraySizeY = 10;
 
     //Amount of empty blocks made for game level
-    private int amountToAdd = 15;
+    private int amountToAdd = 25;
     private int addBlockCounter;
 
     //Tile Object dimensions
@@ -25,6 +25,8 @@ public class LevelGenerator : MonoBehaviour
 
     //Tile List
     private GameObject[,] tilePlacement2dArray;
+    //Tile Settings List
+    //private string[,] tileSettings2dArray;
 
     //Exclusion List
     public List<GameObject> tileExclusionList = new List<GameObject>();
@@ -39,6 +41,9 @@ public class LevelGenerator : MonoBehaviour
     spawnPoint = GameObject.Find("MapGeneratorOriginObj").transform; //Finds the transform of the "Spawnpoint" gameobject object
     tileSize = tileObject.gameObject.renderer.bounds.extents * 2; //adds the tile objects dimesions to the tileSize value
     tilePlacement2dArray = new GameObject[tileArraySizeX, tileArraySizeY]; //makes a new array of gameobjects with dimensions based on 2 "x,y" variables
+    
+    //tileSettings2dArray = new string[tileArraySizeX, tileArraySizeY]; //makes the array of gameObject tile awareness settings
+    
     CreateTileGrid();
     AddBorderToExclusionList();
     //GetRandomTile();
@@ -156,6 +161,7 @@ public class LevelGenerator : MonoBehaviour
                 setSolidSquare(tileSelector);
                 x++;
             }
+            GetSurroundingWallCount(coordX, coordY);
             x--;
         }
     }
@@ -167,7 +173,7 @@ public class LevelGenerator : MonoBehaviour
         tileToSet.gameObject.tag = "solidTile";
         //tileSelector.gameObject.renderer.material.color = Color.red;
         tileToSet.gameObject.GetComponent<MeshRenderer>().enabled = true;
-        Debug.Log(tileToSet);
+        //Debug.Log(tileToSet);
         Debug.Log(addBlockCounter);
         addBlockCounter++;
     }
@@ -177,6 +183,8 @@ public class LevelGenerator : MonoBehaviour
     {
         GetRandomTile();
         GameObject spawnSelector = tilePlacement2dArray[coordX, coordY];
+        SpawnBlockCheck(spawnSelector);
+
         if(spawnSelector.gameObject.tag == "emptyTile")
         {
             GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnSelector.transform.position, Quaternion.identity);
@@ -187,11 +195,36 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-
+    void SpawnBlockCheck(GameObject currentBlock)
+    {
+    
+    }
  
+    void GetSurroundingWallCount(int gridX, int gridY)
+    {
+        //int wallCount = 0;
+        GameObject checkedTile;
+        checkedTile = tilePlacement2dArray[gridX, gridY];
+        if(checkedTile.gameObject.tag == "solidTile")
+        { 
+            for (int neighbourX = gridX - 1;neighbourX <= gridX + 1; neighbourX++) //Breaking because it is using tiles in the exclusion list
+            {
+               for (int neighbourY = gridY - 1;neighbourY <= gridY + 1; neighbourY++)
+               {
+                    if (neighbourX != gridX || neighbourY != gridY)
+                    {
+                    checkedTile = tilePlacement2dArray[neighbourX, neighbourY];     
+                    Debug.Log(checkedTile);
+                    }
+
+               }
+            }        
+        }
+
+    }
 }
 
-
+    
 
 
 
