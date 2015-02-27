@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -57,12 +59,10 @@ public class LevelGenerator : MonoBehaviour
     spawnPoint = GameObject.Find("MapGeneratorOriginObj").transform; //Finds the transform of the "Spawnpoint" gameobject object
     tileSize = tileObject.gameObject.renderer.bounds.extents * 2; //adds the tile objects dimesions to the tileSize value
     tilePlacement2dArray = new GameObject[tileArraySizeX, tileArraySizeY]; //makes a new array of gameobjects with dimensions based on 2 "x,y" variables
-    
-    //tileSettings2dArray = new string[tileArraySizeX, tileArraySizeY]; //makes the array of gameObject tile awareness settings
-    
+
     CreateTileGrid();
     AddBorderToExclusionList();
-    //GetRandomTile();
+    
     AddBlocks();
     SetPlayerSpawn();
     }
@@ -89,7 +89,7 @@ public class LevelGenerator : MonoBehaviour
             for (int y = 0; y < tileArraySizeY; y++)
             {
                 GameObject tileInstance = (GameObject)Instantiate(tileObject, new Vector3(100, 100, 100)/*Arbitrary, spawn out of view*/, Quaternion.identity);
-                tileInstance.name = ("tileGridRef: " + x +"," + y);
+                tileInstance.name = (x + "," + y);
                 tileInstance.transform.parent = tileParent.transform;
                 tileInstance.transform.position = new Vector3(
                                                         spawnPoint.position.x + x * -tileSize.x,
@@ -152,8 +152,8 @@ public class LevelGenerator : MonoBehaviour
    
    void GetRandomTile()
     {
-        coordX = Random.Range(1, tileArraySizeX);
-        coordY = Random.Range(1, tileArraySizeY);
+        coordX = UnityEngine.Random.Range(1, tileArraySizeX);
+        coordY = UnityEngine.Random.Range(1, tileArraySizeY);
         spawnSelector = tilePlacement2dArray[coordX, coordY];
         if(spawnSelector.gameObject.tag == "borderTile") //Makes sure the coords never output border tiles
         {
@@ -165,28 +165,22 @@ public class LevelGenerator : MonoBehaviour
 
     void GetRandomSolidTile() //This is specifically for finding a solid block after the level generation is complete.
    {
-        solidListID = Random.Range(0, solidTileList.Count);
+       solidListID = UnityEngine.Random.Range(0, solidTileList.Count);
         solidListSelectedObj = solidTileList[solidListID];
         Debug.Log("Solid LIST ID" + solidListID);
         Debug.Log("Solid tile selected" + solidListSelectedObj);
 
-        //Debug.Log(solidListSelectedObj.gameObject.name);
+        string stringToInt = solidListSelectedObj.gameObject.name;
+        Debug.Log(stringToInt);
+        string[] ObjNameArray = stringToInt.Split(',');
+        
+        Debug.Log(ObjNameArray[0] + " AND " + ObjNameArray[1]);
+        
+        Int32.TryParse(ObjNameArray[0], out solidCoordX);
+        Int32.TryParse(ObjNameArray[1], out solidCoordY);
 
-
-        //solidCoordX = listPositionID / 10 % 10; 
-        //This will get a seperate int using the remainder after division by 10
-        //solidCoordY = listPositionID % 10; 
-        //Same process, increase the division number by adding a 0 for every additional digit length of an integer. EG: 256 would be split to its 3rd digit by dividing by 100, 3495 would be divided by 1000
-
-        /*
-        int listPositionID = tileExclusionList.IndexOf(solidListSelectedObj);
-        solidCoordX = listPositionID / 10 % 10; //This will get a seperate int using the remainder after division by 10
-        solidCoordY = listPositionID % 10; //Same process, increase the division number by adding a 0 for every additional digit length of an integer. EG: 256 would be split to its 3rd digit by dividing by 100, 3495 would be divided by 1000
-        Debug.Log(listPositionID);
-        Debug.Log(solidCoordX);
-        Debug.Log(solidCoordY);
-       //SpawnBlockCheck(solidCoordX, solidCoordY);
-        */
+        Debug.Log("TO INT : " + solidCoordX);
+        Debug.Log("TO INT : " + solidCoordY);
    }
 
 
@@ -201,7 +195,7 @@ public class LevelGenerator : MonoBehaviour
                 setSolidSquare(tileSelector);
                 x++;
             }
-            GetSurroundingWallCount(coordX, coordY);
+            //GetSurroundingWallCount(coordX, coordY);
             x--;
         }
     }
@@ -224,19 +218,22 @@ public class LevelGenerator : MonoBehaviour
         Debug.Log("MAKE SPAWN");
         GetRandomSolidTile();
 
-        GameObject spawnBaseTile = tilePlacement2dArray[solidCoordX + 1, solidCoordY];
-            spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
-            spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+        GameObject spawnBaseTile = tilePlacement2dArray[solidCoordX, solidCoordY - 1];
+
         if (spawnBaseTile.gameObject.tag == "emptyTile")
         {
             GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
+            spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+            spawnBaseTile.gameObject.renderer.material = transparentMaterial;
         }
         else if(spawnBaseTile.gameObject.tag != "borderTile")
         {
+            Debug.Log("BORDER");
             SetPlayerSpawn();
         }
         else if (spawnBaseTile.gameObject.tag != "emptyTile")
         {
+            Debug.Log("OTHER OUTCOME");
             SetPlayerSpawn();
         }
 
