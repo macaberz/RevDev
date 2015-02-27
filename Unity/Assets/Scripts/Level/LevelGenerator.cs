@@ -13,7 +13,7 @@ public class LevelGenerator : MonoBehaviour
     private int tileArraySizeY = 10;
 
     //Amount of empty blocks made for game level
-    private int amountToAdd = 5;
+    private int amountToAdd = 25;
     private int addBlockCounter;
 
     //Tile Object dimensions
@@ -23,6 +23,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject tileObject;
     //Player spawn instantiation WILL CHANGE THIS TO Resources.Load() folder eventually
     public GameObject playerSpawnPrefab;
+    private GameObject currentPlayerSpawnBlock;
 
 
     //Tile List
@@ -64,7 +65,8 @@ public class LevelGenerator : MonoBehaviour
     AddBorderToExclusionList();
     
     AddBlocks();
-    SetPlayerSpawn();
+    SpawnLevelItems("PlayerSpawn");
+    SpawnLevelItems("EndLevelDoor");
     }
 
 
@@ -213,63 +215,63 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    void SetPlayerSpawn()
+    void SpawnLevelItems(string itemTypeToSpawn)
     {
-        Debug.Log("MAKE SPAWN");
-        GetRandomSolidTile();
 
-        GameObject spawnBaseTile = tilePlacement2dArray[solidCoordX, solidCoordY - 1];
+        if (itemTypeToSpawn == "PlayerSpawn")
+        {
+            GetRandomSolidTile();
 
-        if (spawnBaseTile.gameObject.tag == "emptyTile")
-        {
-            GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
-            spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
-            spawnBaseTile.gameObject.renderer.material = transparentMaterial;
-        }
-        else if(spawnBaseTile.gameObject.tag != "borderTile")
-        {
-            Debug.Log("BORDER");
-            SetPlayerSpawn();
-        }
-        else if (spawnBaseTile.gameObject.tag != "emptyTile")
-        {
-            Debug.Log("OTHER OUTCOME");
-            SetPlayerSpawn();
-        }
+            GameObject spawnBaseTile = tilePlacement2dArray[solidCoordX, solidCoordY - 1];
 
+            if (spawnBaseTile.gameObject.tag == "emptyTile")
+            {
+                GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
+                spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+                currentPlayerSpawnBlock = spawnBaseTile;
+            }
+            else if (spawnBaseTile.gameObject.tag != "borderTile")
+            {
+                Debug.Log("BORDER");
+                SpawnLevelItems("PlayerSpawn");
+            }
+            else if (spawnBaseTile.gameObject.tag != "emptyTile")
+            {
+                Debug.Log("OTHER OUTCOME");
+                SpawnLevelItems("PlayerSpawn");
+            }
+        }
+        else if(itemTypeToSpawn == "EndLevelDoor")
+        {
+            GetRandomSolidTile();
+
+            GameObject spawnBaseTile = tilePlacement2dArray[solidCoordX, solidCoordY - 1];
+            if (spawnBaseTile != currentPlayerSpawnBlock)
+            {
+                if (spawnBaseTile.gameObject.tag == "emptyTile")
+                {
+                    GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
+                    spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                    spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+                }
+                else if (spawnBaseTile.gameObject.tag != "borderTile")
+                {
+                    Debug.Log("BORDER");
+                    SpawnLevelItems("EndLevelDoor");
+                }
+                else if (spawnBaseTile.gameObject.tag != "emptyTile")
+                {
+                    Debug.Log("OTHER OUTCOME");
+                    SpawnLevelItems("EndLevelDoor");
+                }
+            }
+        }
 
 
        
     }
 
-   /* void SpawnBlockCheck(int gridX, int gridY)
-    {
-        GameObject spawnBaseTile = tilePlacement2dArray[gridX, gridY + 1];
-        if (spawnBaseTile.gameObject.tag == "solidTile")
-        {
-            Debug.Log("case of SOLID");
-            spawnBaseTile = tilePlacement2dArray[gridX, gridY + 1];
-
-            spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
-            spawnBaseTile.gameObject.renderer.material = transparentMaterial;
-            /*
-            if (spawnBaseTile.gameObject.tag == "emptyTile")
-            {
-                GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
-            }
-            else if (spawnBaseTile.gameObject.tag != "emptyTile")
-            {
-                SetPlayerSpawn();
-            }
-            
-        }
-        else if (spawnBaseTile.gameObject.tag != "emptyTile")
-        {
-            Debug.Log("case of EMPTY");
-            
-        }
-    }
-    */
  
     void GetSurroundingWallCount(int gridX, int gridY)
     {
