@@ -48,6 +48,9 @@
   <ItemGroup>
      <Compile Include="Assets\Editor\GlobalDefinesWizard.cs" />
      <Compile Include="Assets\Editor\SceneViewWindow.cs" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>G:/WorkingProject Files/_1-Unity Projects/REVDEV/Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Applications/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>

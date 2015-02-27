@@ -19,10 +19,12 @@ public class LevelGenerator : MonoBehaviour
     //Tile Object dimensions
     public Vector3 tileSize;
 
+
     //gameObject to instantiate, I have it set to public so that it is changeable in the editor and I can test dimensional changes in various different object -- purely to debug
     public GameObject tileObject;
     //Player spawn instantiation WILL CHANGE THIS TO Resources.Load() folder eventually
     public GameObject playerSpawnPrefab;
+    public GameObject levelDoorPrefab;
     private GameObject currentPlayerSpawnBlock;
 
 
@@ -170,8 +172,8 @@ public class LevelGenerator : MonoBehaviour
    {
        solidListID = UnityEngine.Random.Range(0, solidTileList.Count);
         solidListSelectedObj = solidTileList[solidListID];
-        Debug.Log("Solid LIST ID" + solidListID);
-        Debug.Log("Solid tile selected" + solidListSelectedObj);
+        //Debug.Log("Solid LIST ID" + solidListID);
+        //Debug.Log("Solid tile selected" + solidListSelectedObj);
 
         string stringToInt = solidListSelectedObj.gameObject.name;
         Debug.Log(stringToInt);
@@ -182,8 +184,8 @@ public class LevelGenerator : MonoBehaviour
         Int32.TryParse(ObjNameArray[0], out solidCoordX);
         Int32.TryParse(ObjNameArray[1], out solidCoordY);
 
-        Debug.Log("TO INT : " + solidCoordX);
-        Debug.Log("TO INT : " + solidCoordY);
+        //Debug.Log("TO INT : " + solidCoordX);
+        //Debug.Log("TO INT : " + solidCoordY);
    }
 
 
@@ -211,7 +213,7 @@ public class LevelGenerator : MonoBehaviour
         solidTileList.Add(tileToSet);
         tileToSet.gameObject.GetComponent<MeshRenderer>().enabled = true;
         //Debug.Log(tileToSet);
-        Debug.Log(addBlockCounter);
+        //Debug.Log(addBlockCounter);
         addBlockCounter++;
     }
 
@@ -227,9 +229,9 @@ public class LevelGenerator : MonoBehaviour
 
             if (spawnBaseTile.gameObject.tag == "emptyTile")
             {
-                GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
-                spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                spawnBaseTile.gameObject.renderer.material = transparentMaterial;
+                GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position , Quaternion.identity);
+                //spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                //spawnBaseTile.gameObject.renderer.material = transparentMaterial;
                 currentPlayerSpawnBlock = spawnBaseTile;
             }
             else if (spawnBaseTile.gameObject.tag != "borderTile")
@@ -252,9 +254,9 @@ public class LevelGenerator : MonoBehaviour
             {
                 if (spawnBaseTile.gameObject.tag == "emptyTile")
                 {
-                    GameObject playerSpawnInstance = (GameObject)Instantiate(playerSpawnPrefab, spawnBaseTile.transform.position, Quaternion.identity);
-                    spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                    spawnBaseTile.gameObject.renderer.material = levelDoor;
+                    GameObject playerSpawnInstance = (GameObject)Instantiate(levelDoorPrefab, spawnBaseTile.transform.position, Quaternion.identity);
+                    //spawnBaseTile.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                    //spawnBaseTile.gameObject.renderer.material = levelDoor;
                 }
                 else if (spawnBaseTile.gameObject.tag != "borderTile")
                 {
@@ -303,9 +305,22 @@ public class LevelGenerator : MonoBehaviour
         }
         //Debug.Log(tileCheckerList);
     }
+
+    void OnGUI()
+{
+    if (GUI.Button(new Rect(10, 70, 110, 30), "ReLoad Level"))
+    {
+        Application.LoadLevel("LevelGen"); 
+    }
+    if (GUI.Button(new Rect(10, 110, 50, 30), "Quit"))
+    {
+        Application.Quit();
+    }
 }
 
-    
+}
+
+
 
 
 
